@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ToggleEditTextView">
-        <attr name="hint" format="string" />
-        <attr name="editable" format="boolean" />
-        <attr name="textViewColor" format="color" />
-        <attr name="editTextViewColor" format="color" />
-        <attr name="editTextBottomLineColor" format="color" />
-        <attr name="textSize" format="dimension" />
+        <attr name="tetv_editing" format="boolean" />
+        <attr name="tetv_textViewColor" format="color" />
+        <attr name="tetv_editTextViewColor" format="color" />
+        <attr name="tetv_editTextBottomLineColor" format="color" />
+        <attr name="android:textSize"/>
+        <attr name="android:hint"/>
+        <attr name="android:inputType"/>
+        <attr name="android:minLines"/>
+        <attr name="android:maxLines"/>
+    </declare-styleable>
+    <declare-styleable name="ToggleEditButton">
+        <attr name="teb_tint" format="color" />
+        <attr name="teb_edit" format="boolean" />
     </declare-styleable>
 </resources>

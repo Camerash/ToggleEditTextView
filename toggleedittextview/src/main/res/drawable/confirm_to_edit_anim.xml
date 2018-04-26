@@ -1,0 +1,29 @@
+<animated-vector
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:name="vector"
+            android:width="48dp"
+            android:height="48dp"
+            android:viewportWidth="48"
+            android:viewportHeight="48">
+            <path
+                android:name="ic_edit"
+                android:pathData="M 6.83 26.83 L 12.415 32.415 L 18 38 L 42 14 L 39.17 11.17 L 18 32.34 L 9.66 24 L 6.83 26.83 M 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 L 36.528 11.473 L 36.528 11.473 L 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473"
+                android:fillColor="#000"
+                android:strokeWidth="1"/>
+        </vector>
+    </aapt:attr>
+    <target android:name="ic_edit">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:propertyName="pathData"
+                android:duration="400"
+                android:valueFrom="M 6.83 26.83 L 12.415 32.415 L 18 38 L 42 14 L 39.17 11.17 L 18 32.34 L 9.66 24 L 6.83 26.83 M 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 L 36.528 11.473 L 36.528 11.473 L 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473 C 36.528 11.473 36.528 11.473 36.528 11.473"
+                android:valueTo="M 6 34.5 L 6 42 L 13.5 42 L 35.63 19.87 L 28.13 12.37 L 17.065 23.435 L 6 34.5 L 6 34.5 M 41.41 14.09 C 41.41 14.09 41.41 14.09 41.41 14.09 L 37.75 17.75 L 30.25 10.25 L 33.91 6.59 C 34.69 5.81 35.96 5.81 36.74 6.59 C 38.297 8.147 39.853 9.703 41.41 11.26 C 42.19 12.04 42.19 13.31 41.41 14.09"
+                android:valueType="pathType"
+                android:interpolator="@android:anim/overshoot_interpolator"/>
+        </aapt:attr>
+    </target>
+</animated-vector>

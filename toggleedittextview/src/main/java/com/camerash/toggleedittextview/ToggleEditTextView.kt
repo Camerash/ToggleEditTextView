@@ -1,9 +1,13 @@
 package com.camerash.toggleedittextview
 
 import android.content.Context
+import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.support.transition.Fade
 import android.support.transition.TransitionManager
+import android.support.transition.TransitionSet
+import android.text.InputType
 import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.View
@@ -15,18 +19,21 @@ import android.widget.TextView
  * Created by camerash on 4/26/18.
  * Compound View to switch between Edit Text and Text View
  */
-class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int): FrameLayout(context, attrs, defStyleAttr) {
+class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : FrameLayout(context, attrs, defStyleAttr) {
 
-    constructor(context: Context): this(context, null, 0)
+    constructor(context: Context) : this(context, null, 0)
 
-    constructor(context: Context, attrs: AttributeSet): this(context, attrs, 0)
+    constructor(context: Context, attrs: AttributeSet) : this(context, attrs, 0)
 
     var textView: TextView
+        private set
+
     var editText: EditText
+        private set
 
-    var editing = false
+    private var editing = false
 
-    init{
+    init {
         inflate(getContext(), R.layout.view_toggle_edit_text, this)
 
         textView = findViewById(R.id.text_view)
@@ -35,43 +42,66 @@ class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         if (attrs != null) {
             val styled = getContext().obtainStyledAttributes(attrs, R.styleable.ToggleEditTextView)
 
-            editing = styled.getBoolean(R.styleable.ToggleEditTextView_editable, false)
-            textView.visibility = if(editing) View.INVISIBLE else View.VISIBLE
-            editText.visibility = if(editing) View.VISIBLE else View.INVISIBLE
-
-            val textViewColor = styled.getColor(R.styleable.ToggleEditTextView_textViewColor, Color.BLACK)
-            textView.setTextColor(textViewColor)
-
-            val editTextColor = styled.getColor(R.styleable.ToggleEditTextView_editTextViewColor, Color.BLACK)
-            editText.setTextColor(editTextColor)
-
-            val editTextBottomLineColor = styled.getColor(R.styleable.ToggleEditTextView_editTextBottomLineColor, editTextColor)
-            editText.background.setColorFilter(editTextBottomLineColor, PorterDuff.Mode.SRC_ATOP)
-
-            val size = styled.getDimension(R.styleable.ToggleEditTextView_textSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18f, context.resources.displayMetrics))
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-            editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
-
-            val hint = styled.getString(R.styleable.ToggleEditTextView_hint)
-            textView.hint = hint
-            editText.hint = hint
-
-            editing = styled.getBoolean(R.styleable.ToggleEditTextView_editable, false)
+            initAttributes(styled)
 
             styled.recycle()
         }
     }
 
-    fun setEditable(editable: Boolean) {
-        if(editable != editing) {
-            editing = editable
-            if(!editing) textView.text = editText.text // Set editText text to textView
+    private fun initAttributes(styled: TypedArray) {
+        editing = styled.getBoolean(R.styleable.ToggleEditTextView_tetv_editing, false)
+        textView.visibility = if (editing) View.GONE else View.VISIBLE
+        editText.visibility = if (editing) View.VISIBLE else View.GONE
 
-            TransitionManager.beginDelayedTransition(this)
-            textView.visibility = if(editing) View.INVISIBLE else View.VISIBLE
-            editText.visibility = if(editing) View.VISIBLE else View.INVISIBLE
+        val textViewColor = styled.getColor(R.styleable.ToggleEditTextView_tetv_textViewColor, Color.BLACK)
+        setTextViewColor(textViewColor)
+
+        val editTextColor = styled.getColor(R.styleable.ToggleEditTextView_tetv_editTextViewColor, Color.BLACK)
+        setEditTextColor(editTextColor)
+
+        val editTextBottomLineColor = styled.getColor(R.styleable.ToggleEditTextView_tetv_editTextBottomLineColor, editTextColor)
+        setEditTextBottomLineColor(editTextBottomLineColor)
+
+        val size = styled.getDimension(R.styleable.ToggleEditTextView_android_textSize, TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 18f, context.resources.displayMetrics))
+        setTextSize(size)
+
+        val hint = styled.getString(R.styleable.ToggleEditTextView_android_hint)
+        if(hint != null) setHint(hint)
+
+        val inputType = styled.getInt(R.styleable.ToggleEditTextView_android_inputType, InputType.TYPE_CLASS_TEXT)
+        setInputType(inputType)
+
+        val minLines = styled.getInt(R.styleable.ToggleEditTextView_android_minLines, 0)
+        setMinLines(minLines)
+
+        val maxLines = styled.getInt(R.styleable.ToggleEditTextView_android_maxLines, Integer.MAX_VALUE)
+        setMaxLines(maxLines)
+    }
+
+    private fun generateTransitionSet(editing: Boolean): TransitionSet {
+        val transitionSet = TransitionSet()
+        val textViewFade = Fade()
+        textViewFade.addTarget(textView)
+        val editTextFade = Fade()
+        editTextFade.addTarget(editText)
+
+        if(editing) textViewFade.startDelay = FADE_DELAY else editTextFade.startDelay = FADE_DELAY
+        return transitionSet.addTransition(textViewFade).addTransition(editTextFade)
+    }
+
+    fun setEditing(editing: Boolean, animate: Boolean) {
+        if (editing != this.editing) {
+            this.editing = editing
+            if (!this.editing) textView.text = editText.text // Set editText text to textView
+
+            if(animate) TransitionManager.beginDelayedTransition(this, generateTransitionSet(this.editing))
+            textView.visibility = if (this.editing) View.GONE else View.VISIBLE
+            editText.visibility = if (this.editing) View.VISIBLE else View.GONE
+            editText.isEnabled = this.editing
         }
     }
+
+    fun getEditing(): Boolean = this.editing
 
     fun getText(): String = editText.text.toString()
 
@@ -80,11 +110,54 @@ class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         editText.setText(text)
     }
 
-    fun getHint() : String = editText.hint.toString()
+    fun getHint(): String = editText.hint.toString()
 
     fun setHint(hint: String) {
         textView.hint = hint
         editText.hint = hint
+    }
+
+    fun getTextSize(): Float = editText.textSize
+
+    fun setTextSize(size: Float) {
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+        editText.setTextSize(TypedValue.COMPLEX_UNIT_PX, size)
+    }
+
+    fun getTextViewColor(): Int = textView.textColors.defaultColor
+
+    fun setTextViewColor(color: Int) {
+        textView.setTextColor(color)
+    }
+
+    fun getEditTextColor(): Int = editText.textColors.defaultColor
+
+    fun setEditTextColor(color: Int) {
+        editText.setTextColor(color)
+    }
+
+    fun getInputType(): Int = editText.inputType
+
+    fun setInputType(type: Int) {
+        editText.inputType = type
+    }
+
+    fun setMinLines(minLines: Int) {
+        textView.minLines = minLines
+        editText.minLines = minLines
+    }
+
+    fun setMaxLines(maxLines: Int) {
+        textView.maxLines = maxLines
+        editText.maxLines = maxLines
+    }
+
+    fun setEditTextBottomLineColor(color: Int) {
+        editText.background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+    }
+
+    companion object {
+        const val FADE_DELAY = 50L
     }
 
 }

@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ToggleEditTextView</string>
+
+    <string name="name">Name</string>
+    <string name="age">Age</string>
+    <string name="hobbies">Hobbies</string>
+    <string name="address">Address</string>
 </resources>

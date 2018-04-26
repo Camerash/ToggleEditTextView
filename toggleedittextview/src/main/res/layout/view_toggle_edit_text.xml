@@ -19,6 +19,8 @@
         android:id="@+id/edit_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="top"
+        android:visibility="gone"
         android:textSize="18sp"
         android:textColor="@android:color/black" />
 
