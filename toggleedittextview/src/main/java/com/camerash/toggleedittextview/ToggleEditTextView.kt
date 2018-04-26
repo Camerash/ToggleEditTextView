@@ -136,6 +136,12 @@ class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         editText.setTextColor(color)
     }
 
+    fun getEditTextEnabled(): Boolean = editText.isEnabled
+
+    fun setEditTextEnabled(enable: Boolean) {
+        editText.isEnabled = enable
+    }
+
     fun getInputType(): Int = editText.inputType
 
     fun setInputType(type: Int) {

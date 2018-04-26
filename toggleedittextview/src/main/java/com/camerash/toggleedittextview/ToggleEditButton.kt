@@ -18,8 +18,10 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
     private val editToConfirmAnim = AnimatedVectorDrawableCompat.create(context, R.drawable.edit_to_confirm_anim)
     private val confirmToEditAnim = AnimatedVectorDrawableCompat.create(context, R.drawable.confirm_to_edit_anim)
 
+    private var onClickListener: OnClickListener? = null
+
     private var editing = false
-    private var animationOffset = 50L
+    private var animationOffset = 100L
 
     constructor(context: Context): this(context, null, 0)
 
@@ -34,7 +36,14 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
             styled.recycle()
         }
 
-        setOnClickListener { setEditing(!editing, true) }
+        super.setOnClickListener {
+            onClickListener?.onClick(it)
+            setEditing(!editing, true)
+        }
+    }
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        this.onClickListener = l
     }
 
     private fun initAttributes(styled: TypedArray) {
@@ -61,6 +70,7 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
         this.editing = editing
         if(animate) {
             tetvArrayList.forEachIndexed { i, tetv ->
+                tetv.setEditTextEnabled(this.editing)
                 Handler().postDelayed({ tetv.setEditing(this.editing, animate) }, animationOffset*i)
             }
             resetButton(animate)
