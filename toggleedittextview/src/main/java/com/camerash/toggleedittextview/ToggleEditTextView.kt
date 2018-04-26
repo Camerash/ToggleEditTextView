@@ -68,13 +68,13 @@ class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         val hint = styled.getString(R.styleable.ToggleEditTextView_android_hint)
         if(hint != null) setHint(hint)
 
-        val inputType = styled.getInt(R.styleable.ToggleEditTextView_android_inputType, InputType.TYPE_CLASS_TEXT)
+        val inputType = styled.getInteger(R.styleable.ToggleEditTextView_android_inputType, InputType.TYPE_CLASS_TEXT)
         setInputType(inputType)
 
-        val minLines = styled.getInt(R.styleable.ToggleEditTextView_android_minLines, 0)
+        val minLines = styled.getInteger(R.styleable.ToggleEditTextView_android_minLines, 0)
         setMinLines(minLines)
 
-        val maxLines = styled.getInt(R.styleable.ToggleEditTextView_android_maxLines, Integer.MAX_VALUE)
+        val maxLines = styled.getInteger(R.styleable.ToggleEditTextView_android_maxLines, Integer.MAX_VALUE)
         setMaxLines(maxLines)
     }
 

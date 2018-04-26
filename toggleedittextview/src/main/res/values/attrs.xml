@@ -14,5 +14,6 @@
     <declare-styleable name="ToggleEditButton">
         <attr name="teb_tint" format="color" />
         <attr name="teb_edit" format="boolean" />
+        <attr name="teb_animationOffset" format="integer" />
     </declare-styleable>
 </resources>

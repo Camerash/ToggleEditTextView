@@ -52,6 +52,9 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
 
         val editing = styled.getBoolean(R.styleable.ToggleEditButton_teb_edit, false)
         setEditing(editing, false)
+
+        val offset = styled.getInteger(R.styleable.ToggleEditButton_teb_animationOffset, 100).toLong()
+        setAnimationOffset(offset)
     }
 
     private fun resetButton(animate: Boolean) {
@@ -87,7 +90,7 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
 
     fun bind(vararg toggleEditTextView: ToggleEditTextView) {
         tetvArrayList.addAll(toggleEditTextView)
-
+        tetvArrayList.forEach { it.setEditing(this.editing, false) }
     }
 
     fun unbind(toggleEditTextView: ToggleEditTextView) {

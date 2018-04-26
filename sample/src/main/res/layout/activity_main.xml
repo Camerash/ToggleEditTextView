@@ -15,7 +15,9 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:teb_tint="@color/colorAccent" />
+        app:teb_tint="@color/colorAccent"
+        app:teb_edit="true"
+        app:teb_animationOffset="100"/>
 
     <com.camerash.toggleedittextview.ToggleEditTextView
         android:id="@+id/tetv1"
