@@ -5,6 +5,7 @@ apply plugin: 'com.github.dcendents.android-maven'
 
 def VERSION = '0.0.1'
 
+group = 'com.camerash'
 version = VERSION
 
 def bintrayUser = System.getenv('BINTRAY_USER')
@@ -80,7 +81,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = 'maven'
-        name = 'toggleedittextview'
+        name = 'ToggleEditTextView'
         desc = 'Easily switch between EditText and TextView seamlessly.'
         websiteUrl = 'https://github.com/Camerash/ToggleEditTextView'
         vcsUrl = 'https://github.com/Camerash/ToggleEditTextView.git'
@@ -105,12 +106,14 @@ install {
         pom {
             project {
                 packaging 'aar'
-                groupId 'com.camerash'
+                groupId this.group
                 artifactId 'toggleedittextview'
 
                 name 'ToggleEditTextView'
                 description 'Easily switch between EditText and TextView seamlessly.'
                 url 'https://github.com/Camerash/ToggleEditTextView'
+
+                version = this.version
 
                 licenses {
                     license {
