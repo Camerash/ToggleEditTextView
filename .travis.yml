@@ -27,5 +27,3 @@ install:
   # Temporary fix to Android SDK 27
   # Ref: https://github.com/travis-ci/travis-ci/issues/8874
   - yes | sdkmanager "platforms;android-27"
-  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout;1.1.0"
-  - echo yes | sdkmanager "extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.1.0"
