@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ToggleEditTextView">
+        <attr name="hint" format="string" />
+        <attr name="editable" format="boolean" />
+        <attr name="textViewColor" format="color" />
+        <attr name="editTextViewColor" format="color" />
+        <attr name="editTextBottomLineColor" format="color" />
+        <attr name="textSize" format="dimension" />
+    </declare-styleable>
+</resources>
