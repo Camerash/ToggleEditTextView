@@ -98,6 +98,10 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
         tetvArrayList.clear()
     }
 
+    fun getAnimationOffset(): Long = animationOffset
 
+    fun setAnimationOffset(offset: Long) {
+        this.animationOffset = offset
+    }
 
 }
