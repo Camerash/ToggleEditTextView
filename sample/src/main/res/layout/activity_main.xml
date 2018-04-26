@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:teb_animationOffset="100"
-        app:teb_edit="true"
+        app:teb_edit="false"
         app:teb_tint="@color/colorAccent" />
 
     <com.camerash.toggleedittextview.ToggleEditTextView
