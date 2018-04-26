@@ -1,6 +1,24 @@
-def VERSION = '0.0.1'
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.jfrog.bintray'
+apply plugin: 'com.github.dcendents.android-maven'
+
+def VERSION = '0.0.1'
+
+version = VERSION
+
+def bintrayUser = System.getenv('BINTRAY_USER')
+def bintrayApiKey = System.getenv('BINTRAY_API_KEY')
+def bintrayPass = System.getenv('BINTRAY_PASS')
+
+if (project.rootProject.file('local.properties').exists()) {
+    Properties localProperties = new Properties()
+    localProperties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+    bintrayUser = localProperties.getProperty('bintray.user', bintrayUser)
+    bintrayApiKey = localProperties.getProperty('bintray.apikey', bintrayApiKey)
+    bintrayPass = localProperties.getProperty('bintray.gpg.password', bintrayPass)
+}
 
 android {
     compileSdkVersion 27
@@ -9,7 +27,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName VERSION
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -35,30 +53,84 @@ repositories {
     mavenCentral()
 }
 
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'toggleedittextview'
-
-    publishedGroupId = 'com.camerash'
-    libraryName = 'ToggleEditTextView'
-    artifact = 'toggleedittextview'
-
-    libraryDescription = 'Easily switch between EditText and TextView seamlessly.'
-
-    siteUrl = 'https://github.com/Camerash/ToggleEditTextView'
-    gitUrl = 'https://github.com/Camerash/ToggleEditTextView.git'
-
-    libraryVersion = VERSION
-
-    developerId = 'camerash'
-    developerName = 'Esmond Wong'
-    developerEmail = 'esmond9981127@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://opensource.org/licenses/MIT'
-    allLicenses = ['MIT']
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.srcDirs
 }
 
-// Credits to https://github.com/nuuneoi
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
+task javadoc(type: Javadoc) {
+    excludes = ['**/*.kt'] // exclude kotlin files
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayApiKey
+    configurations = ['archives']
+    pkg {
+        repo = 'maven'
+        name = 'toggleedittextview'
+        desc = 'Easily switch between EditText and TextView seamlessly.'
+        websiteUrl = 'https://github.com/Camerash/ToggleEditTextView'
+        vcsUrl = 'https://github.com/Camerash/ToggleEditTextView.git'
+        licenses = ['MIT']
+        publish = true
+        publicDownloadNumbers = true
+        version {
+            name = VERSION
+            desc = "ToggleEditTextView ${VERSION}"
+            released  = new Date()
+            vcsTag = VERSION
+            gpg {
+                sign = true
+                passphrase = bintrayPass
+            }
+        }
+    }
+}
+
+install {
+    repositories.mavenInstaller {
+        pom {
+            project {
+                packaging 'aar'
+                groupId 'com.camerash'
+                artifactId 'toggleedittextview'
+
+                name 'ToggleEditTextView'
+                description 'Easily switch between EditText and TextView seamlessly.'
+                url 'https://github.com/Camerash/ToggleEditTextView'
+
+                licenses {
+                    license {
+                        name 'The MIT License'
+                        url 'http://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'camerash'
+                        name 'Esmond Wong'
+                        email 'esmond9981127@gmail.com'
+                    }
+                }
+                scm {
+                    connection 'https://github.com/Camerash/ToggleEditTextView.git'
+                    developerConnection 'https://github.com/Camerash/ToggleEditTextView.git'
+                    url 'https://github.com/Camerash/ToggleEditTextView'
+                }
+            }
+        }
+    }
+}
