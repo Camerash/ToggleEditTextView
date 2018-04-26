@@ -10,7 +10,6 @@ version = VERSION
 
 def bintrayUser = System.getenv('BINTRAY_USER')
 def bintrayApiKey = System.getenv('BINTRAY_API_KEY')
-def bintrayPass = System.getenv('BINTRAY_PASS')
 
 if (project.rootProject.file('local.properties').exists()) {
     Properties localProperties = new Properties()
@@ -18,7 +17,6 @@ if (project.rootProject.file('local.properties').exists()) {
 
     bintrayUser = localProperties.getProperty('bintray.user', bintrayUser)
     bintrayApiKey = localProperties.getProperty('bintray.apikey', bintrayApiKey)
-    bintrayPass = localProperties.getProperty('bintray.gpg.password', bintrayPass)
 }
 
 android {
@@ -93,10 +91,6 @@ bintray {
             desc = "ToggleEditTextView ${VERSION}"
             released  = new Date()
             vcsTag = VERSION
-            gpg {
-                sign = true
-                passphrase = bintrayPass
-            }
         }
     }
 }
