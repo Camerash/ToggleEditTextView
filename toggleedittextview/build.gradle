@@ -103,7 +103,7 @@ install {
                 groupId this.group
                 artifactId 'toggleedittextview'
 
-                name 'ToggleEditTextView'
+                name 'toggleedittextview'
                 description 'Easily switch between EditText and TextView seamlessly.'
                 url 'https://github.com/Camerash/ToggleEditTextView'
 
