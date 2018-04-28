@@ -3,7 +3,9 @@ package com.camerash.toggleedittextview
 import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
+import android.os.Bundle
 import android.os.Handler
+import android.os.Parcelable
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat
 import android.support.v7.widget.AppCompatImageButton
 import android.util.AttributeSet
@@ -42,10 +44,6 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
         }
     }
 
-    override fun setOnClickListener(l: OnClickListener?) {
-        this.onClickListener = l
-    }
-
     private fun initAttributes(styled: TypedArray) {
         val tint = styled.getColor(R.styleable.ToggleEditButton_teb_tint, Color.BLACK)
         setTint(tint)
@@ -68,6 +66,8 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
             setImageDrawable(if (this.editing) confirmToEditAnim else editToConfirmAnim)
         }
     }
+
+    fun getEditing(): Boolean = this.editing
 
     fun setEditing(editing: Boolean, animate: Boolean) {
         this.editing = editing
@@ -107,4 +107,28 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
         this.animationOffset = offset
     }
 
+    override fun setOnClickListener(l: OnClickListener?) {
+        this.onClickListener = l
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val bundle = Bundle()
+        bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState())
+        bundle.putBoolean(EDIT_KEY, getEditing())
+        return bundle
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable) {
+        var superState = state
+        if (state is Bundle) {
+            superState = state.getParcelable(SUPER_STATE_KEY)
+            setEditing(state.getBoolean(EDIT_KEY),false)
+        }
+        super.onRestoreInstanceState(superState)
+    }
+
+    companion object {
+        const val SUPER_STATE_KEY = "super_state"
+        const val EDIT_KEY = "edit"
+    }
 }

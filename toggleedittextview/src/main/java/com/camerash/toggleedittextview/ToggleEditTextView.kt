@@ -4,11 +4,14 @@ import android.content.Context
 import android.content.res.TypedArray
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Bundle
+import android.os.Parcelable
 import android.support.transition.Fade
 import android.support.transition.TransitionManager
 import android.support.transition.TransitionSet
 import android.text.InputType
 import android.util.AttributeSet
+import android.util.SparseArray
 import android.util.TypedValue
 import android.view.View
 import android.widget.EditText
@@ -162,8 +165,36 @@ class ToggleEditTextView(context: Context, attrs: AttributeSet?, defStyleAttr: I
         editText.background.setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
     }
 
-    companion object {
-        const val FADE_DELAY = 50L
+    override fun onSaveInstanceState(): Parcelable {
+        val bundle = Bundle()
+        bundle.putParcelable(SUPER_STATE_KEY, super.onSaveInstanceState())
+        bundle.putString(TEXT_KEY, getText())
+        bundle.putBoolean(EDIT_KEY, getEditing())
+        return bundle
     }
 
+    override fun onRestoreInstanceState(state: Parcelable) {
+        var superState = state
+        if (state is Bundle) {
+            superState = state.getParcelable(SUPER_STATE_KEY)
+            setEditing(state.getBoolean(EDIT_KEY),false)
+            setText(state.getString(TEXT_KEY))
+        }
+        super.onRestoreInstanceState(superState)
+    }
+
+    override fun dispatchSaveInstanceState(container: SparseArray<Parcelable>) {
+        super.dispatchFreezeSelfOnly(container)
+    }
+
+    override fun dispatchRestoreInstanceState(container: SparseArray<Parcelable>) {
+        super.dispatchThawSelfOnly(container)
+    }
+
+    companion object {
+        const val FADE_DELAY = 50L
+        const val SUPER_STATE_KEY = "super_state"
+        const val TEXT_KEY = "text"
+        const val EDIT_KEY = "edit"
+    }
 }
