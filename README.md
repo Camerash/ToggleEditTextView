@@ -1,6 +1,8 @@
 # ToggleEditTextView :pencil:
 Easily switch between EditText and TextView seamlessly.
 
+![Travis CI build status](https://travis-ci.org/Camerash/ToggleEditTextView.svg?branch=master)
+
 ![ToggleEditTextView](/assets/preview.gif)
 
 ## Grab via Gradle :coffee:
