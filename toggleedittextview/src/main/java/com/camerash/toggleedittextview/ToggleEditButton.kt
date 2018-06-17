@@ -39,8 +39,8 @@ class ToggleEditButton(context: Context, attrs: AttributeSet?, defStyleAttr: Int
         }
 
         super.setOnClickListener {
-            onClickListener?.onClick(it)
             setEditing(!editing, true)
+            onClickListener?.onClick(it)
         }
     }
 
