@@ -8,7 +8,7 @@ Easily switch between EditText and TextView seamlessly.
 ## Grab via Gradle :coffee:
 ```groovy
 dependencies {
-    implementation 'com.camerash:toggleedittextview:0.1.0'
+    implementation 'com.camerash:toggleedittextview:0.1.1'
 }
 ```
 
